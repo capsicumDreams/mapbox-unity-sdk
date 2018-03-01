@@ -140,7 +140,13 @@ timestamp   INTEGER NOT NULL,
 		{
 			TableQuery<metadata> tq = _sqlite.Table<metadata>();
 			if (null == tq) { return null; }
-			return tq.Select(r => new KeyValuePair<string, string>(r.name, r.value)).ToList().AsReadOnly();
+			
+			var collection = new List<KeyValuePair<String, String>>();
+			foreach (var row in tq.Select(r => r))
+			{
+				collection.Add(new KeyValuePair<string, string>(row.name, row.value));
+			}
+			return collection.AsReadOnly();
 		}
 
 
